@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nós 💖</title>
+
+<style>
+:root{
+  --bg1:#0f0c29;
+  --bg2:#302b63;
+  --bg3:#24243e;
+  --accent:#ff6ec7;
+  --accent2:#7c5cff;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  min-height:100vh;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg,var(--bg1),var(--bg2),var(--bg3));
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
+
+.container{
+  width:90%;
+  max-width:1200px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:40px;
+  align-items:center;
+}
+
+@media(max-width:900px){
+  .container{grid-template-columns:1fr}
+}
+
+/* LEFT SIDE */
+.left{
+  display:flex;
+  flex-direction:column;
+  gap:30px;
+}
+
+.phrase{
+  font-size:28px;
+  font-weight:700;
+  background:linear-gradient(135deg,#ffd1eb,#c9b8ff);
+  -webkit-background-clip:text;
+  color:transparent;
+  min-height:80px;
+  transition:opacity .5s ease;
+}
+
+.timer{
+  font-size:20px;
+  background:rgba(255,255,255,.1);
+  padding:20px;
+  border-radius:20px;
+  backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.2);
+}
+
+.timer span{
+  font-weight:bold;
+  font-size:26px;
+  color:#ff6ec7;
+}
+
+/* RIGHT SIDE */
+.right{
+  position:relative;
+  border-radius:25px;
+  overflow:hidden;
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
+}
+
+.right img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+.overlay{
+  position:absolute;
+  inset:0;
+  background:linear-gradient(to top,rgba(0,0,0,.75),rgba(0,0,0,.2));
+  display:flex;
+  align-items:flex-end;
+  padding:30px;
+}
+
+.loveMessage{
+  font-size:20px;
+  line-height:1.6;
+  font-weight:600;
+}
+
+.heart{
+  position:absolute;
+  font-size:20px;
+  animation:floatUp 6s linear infinite;
+  opacity:0;
+}
+
+@keyframes floatUp{
+  0%{transform:translateY(40px);opacity:0}
+  20%{opacity:1}
+  100%{transform:translateY(-500px);opacity:0}
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- LEFT -->
+  <div class="left">
+    <div class="phrase" id="phrase"></div>
+
+    <div class="timer">
+      Estamos juntos há:<br><br>
+      <span id="days"></span> dias  
+      <span id="hours"></span> horas  
+      <span id="minutes"></span> minutos  
+      <span id="seconds"></span> segundos 💖
+    </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="right">
+    <img src="fotos/voo.jpeg" alt="Viagem para os Açores">
+
+    <div class="overlay">
+      <div class="loveMessage">
+        Se for preciso atravesso oceanos,  
+        gasto todo o dinheiro do mundo,  
+        viro o mundo do avesso…  
+        só para te abraçar mais uma vez.  
+        💕
+      </div>
+    </div>
+  </div>
+
+</div>
+
+  <audio id="bgMusic" loop>
+    <source src="musica/thoseEyes.mp3" type="audio/mpeg">
+  </audio>
+
+<script>
+
+// DATA DE INÍCIO DO NAMORO
+const startDate = new Date("2022-07-22T00:00:00");
+
+function updateTimer(){
+  const now = new Date();
+  const diff = now - startDate;
+
+  const days = Math.floor(diff / (1000*60*60*24));
+  const hours = Math.floor((diff / (1000*60*60)) % 24);
+  const minutes = Math.floor((diff / (1000*60)) % 60);
+  const seconds = Math.floor((diff / 1000) % 60);
+
+  document.getElementById("days").innerText = days;
+  document.getElementById("hours").innerText = hours;
+  document.getElementById("minutes").innerText = minutes;
+  document.getElementById("seconds").innerText = seconds;
+}
+
+setInterval(updateTimer,1000);
+updateTimer();
+
+// FRASES ROTATIVAS
+const phrases = [
+  "Estás longe… mas tu estás sempre no meu coração.",
+  "Cada quilómetro vale a pena quando o destino és tu.",
+  "O amor não conhece distância.",
+  "A melhor viagem é sempre até ti.",
+  "Se for preciso, voo mil vezes só para te ver."
+];
+
+let i = 0;
+const phraseEl = document.getElementById("phrase");
+
+function changePhrase(){
+  phraseEl.style.opacity = 0;
+  setTimeout(()=>{
+    phraseEl.innerText = phrases[i];
+    phraseEl.style.opacity = 1;
+    i = (i+1) % phrases.length;
+  },500);
+}
+
+changePhrase();
+setInterval(changePhrase,4000);
+
+// CORAÇÕES A SUBIR
+setInterval(()=>{
+  const heart = document.createElement("div");
+  heart.classList.add("heart");
+  heart.innerText = "💖";
+  heart.style.left = Math.random()*100 + "vw";
+  heart.style.bottom = "0px";
+  heart.style.fontSize = (Math.random()*20 + 15) + "px";
+  document.body.appendChild(heart);
+
+  setTimeout(()=>heart.remove(),6000);
+},800);
+
+</script>
+<script src="assets/player.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,569 @@
+<!doctype html>
+<html lang="pt">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Feliz Dia dos Namorados ❤️</title>
+  <style>
+    :root {
+      --bg1: #0b1020;
+      --bg2: #1a1033;
+      --card: rgba(255, 255, 255, .08);
+      --border: rgba(255, 255, 255, .14);
+      --text: #f6f3ff;
+      --muted: rgba(246, 243, 255, .75);
+      --accent: #ff66c4;
+      --accent2: #7c5cff;
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(1200px 700px at 20% 15%, rgba(255, 102, 196, .22), transparent 55%),
+        radial-gradient(900px 600px at 80% 20%, rgba(124, 92, 255, .22), transparent 55%),
+        linear-gradient(135deg, var(--bg1), var(--bg2));
+      overflow: hidden;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    .wrap {
+      width: min(980px, 100%);
+      display: grid;
+      gap: 16px;
+      align-items: center
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      opacity: .95;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, .16);
+      background: rgba(0, 0, 0, .12);
+      font-size: 13px;
+      color: var(--muted);
+      backdrop-filter: blur(10px);
+    }
+
+    .badge b {
+      color: var(--text)
+    }
+
+    /* Envelope + Letter */
+    .stage {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    @media (max-width: 880px) {
+      .stage {
+        grid-template-columns: 1fr
+      }
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 16px;
+      box-shadow: 0 18px 60px rgba(0, 0, 0, .35);
+      backdrop-filter: blur(10px);
+      position: relative;
+    }
+
+    .envelope {
+      height: 420px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
+
+    .env {
+      width: min(520px, 100%);
+      height: 340px;
+      position: relative;
+      transform: translateY(10px);
+      filter: drop-shadow(0 18px 40px rgba(0, 0, 0, .35));
+    }
+
+    /* Envelope body */
+    .env .base {
+      position: absolute;
+      inset: 0;
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, .14), rgba(255, 255, 255, .06));
+      border: 1px solid rgba(255, 255, 255, .18);
+      overflow: hidden;
+    }
+
+    .env .base:before {
+      content: "";
+      position: absolute;
+      inset: -40px;
+      background: radial-gradient(circle at 30% 30%, rgba(255, 102, 196, .20), transparent 50%),
+        radial-gradient(circle at 70% 70%, rgba(124, 92, 255, .22), transparent 55%);
+      transform: rotate(8deg);
+    }
+
+    /* Flap */
+    .env .flap {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      height: 62%;
+      transform-origin: top center;
+      background: linear-gradient(135deg, rgba(255, 255, 255, .22), rgba(255, 255, 255, .08));
+      border: 1px solid rgba(255, 255, 255, .18);
+      border-bottom: none;
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      border-top-left-radius: 18px;
+      border-top-right-radius: 18px;
+      animation: flapOpen 1.15s ease forwards;
+      animation-delay: .35s;
+    }
+
+    /* Front triangles */
+    .env .frontLeft,
+    .env .frontRight {
+      position: absolute;
+      bottom: 0;
+      top: 38%;
+      width: 52%;
+      background: linear-gradient(135deg, rgba(255, 255, 255, .10), rgba(255, 255, 255, .05));
+      border: 1px solid rgba(255, 255, 255, .14);
+    }
+
+    .env .frontLeft {
+      left: 0;
+      clip-path: polygon(0 100%, 0 0, 100% 100%);
+      border-right: none;
+      border-bottom-left-radius: 18px;
+    }
+
+    .env .frontRight {
+      right: 0;
+      clip-path: polygon(100% 100%, 0 100%, 100% 0);
+      border-left: none;
+      border-bottom-right-radius: 18px;
+    }
+
+    /* Letter */
+    .letter {
+      position: absolute;
+      left: 50%;
+      top: 52%;
+      transform: translate(-50%, -50%);
+      width: 86%;
+      height: 86%;
+      background: rgba(255, 255, 255, .10);
+      border: 1px solid rgba(255, 255, 255, .18);
+      border-radius: 16px;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+      animation: letterRise 1.25s cubic-bezier(.2, .8, .2, 1) forwards;
+      animation-delay: .75s;
+    }
+
+    .letterInner {
+      position: absolute;
+      inset: 14px;
+      border-radius: 12px;
+      background: rgba(0, 0, 0, .14);
+      border: 1px solid rgba(255, 255, 255, .12);
+      padding: 14px;
+      display: grid;
+      grid-template-rows: auto auto 1fr auto;
+      gap: 10px;
+    }
+
+    .title {
+      font-weight: 900;
+      font-size: 24px;
+      line-height: 1.15;
+      background: linear-gradient(135deg, #ffd1eb, #c9b8ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      line-height: 1.5
+    }
+
+    .signature {
+      color: rgba(246, 243, 255, .9);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-weight: 700;
+    }
+
+    .heart {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 10px rgba(255, 102, 196, .10);
+      animation: pulse 1.4s ease-in-out infinite;
+    }
+
+    /* Photo panel */
+    .photos {
+      height: 420px;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 12px;
+    }
+
+    .photoFrame {
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, .14);
+      background: rgba(0, 0, 0, .14);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .photoFrame img {
+      position: absolute;
+      inset: 0;
+
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+
+      transform: scale(1.03);
+      filter: saturate(1.05) contrast(1.02);
+      opacity: 0;
+      transition: opacity .8s ease;
+    }
+
+
+    .photoFrame img.active {
+      opacity: 1
+    }
+
+    .caption {
+      position: absolute;
+      left: 12px;
+      bottom: 12px;
+      right: 12px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(0, 0, 0, .35);
+      border: 1px solid rgba(255, 255, 255, .16);
+      backdrop-filter: blur(8px);
+      color: rgba(246, 243, 255, .92);
+      font-size: 14px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      padding: 12px 14px;
+      border-radius: 12px;
+      font-weight: 800;
+      color: #120a1f;
+      background: linear-gradient(135deg, #ff66c4, #7c5cff);
+      box-shadow: 0 10px 30px rgba(255, 102, 196, .18);
+    }
+
+    button.secondary {
+      color: var(--text);
+      background: rgba(255, 255, 255, .10);
+      border: 1px solid rgba(255, 255, 255, .16);
+      box-shadow: none;
+    }
+
+    /* Heart confetti */
+    .confetti {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .h {
+      position: absolute;
+      font-size: 18px;
+      opacity: 0;
+      animation: fall linear forwards;
+      filter: drop-shadow(0 6px 12px rgba(0, 0, 0, .35));
+    }
+
+    /* Animations */
+    @keyframes flapOpen {
+      from {
+        transform: rotateX(0deg)
+      }
+
+      to {
+        transform: rotateX(165deg)
+      }
+    }
+
+    @keyframes letterRise {
+      from {
+        transform: translate(-50%, -35%)
+      }
+
+      to {
+        transform: translate(-50%, -62%)
+      }
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        transform: scale(1)
+      }
+
+      50% {
+        transform: scale(1.25)
+      }
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(-40px) rotate(0deg);
+        opacity: 0
+      }
+
+      10% {
+        opacity: .95
+      }
+
+      100% {
+        transform: translateY(calc(100vh + 60px)) rotate(360deg);
+        opacity: 0
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="confetti" id="confetti"></div>
+
+  <div class="wrap">
+    <div class="topbar">
+      <div class="badge">💌 <b>Feliz Dia dos Namorados Amor</b></div>
+      <div class="badge" id="tip">Clica em “Começar o puzzle” quando estiveres pronta</div>
+    </div>
+
+    <div class="stage">
+      <!-- Envelope / Letter -->
+      <div class="card envelope" aria-label="Carta de amor animada">
+        <div class="env">
+          <div class="base"></div>
+          <div class="letter">
+            <div class="letterInner">
+              <div class="title">Feliz Dia dos Namorados ❤️</div>
+              <div class="subtitle" id="message">
+                Hoje só quero lembrar-te o quanto AMO a nossa história.
+                Obrigado por seres a minha pessoa favorita. 🥹
+              </div>
+
+              <div style="opacity:.9; line-height:1.6; color: var(--muted)">
+                <div>• Pequena missão: desbloqueia o cadeado.</div>
+                <div>• Depois… há uma surpresa a seguir 🌳✨</div>
+              </div>
+
+              <div class="signature">
+                <span>Com amor, sempre.</span>
+                <span class="heart" aria-hidden="true"></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flap"></div>
+          <div class="frontLeft"></div>
+          <div class="frontRight"></div>
+        </div>
+      </div>
+
+      <!-- Photos -->
+      <div class="card photos" aria-label="Fotos">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;">
+          <div style="font-weight:900; font-size:18px;">Nós ❤️</div>
+        </div>
+
+        <div class="photoFrame">
+          <!-- Troca src pelas vossas fotos -->
+          <img class="active" src="fotos/1.jpeg" alt="Foto 1" />
+          <img src="fotos/2.jpeg" alt="Foto 2" />
+          <img src="fotos/3.jpeg" alt="Foto 3" />
+          <img src="fotos/4.jpeg" alt="Foto 4" />
+          <img src="fotos/5.jpeg" alt="Foto 5" />
+          <img src="fotos/6.jpeg" alt="Foto 6" />
+          <img src="fotos/7.jpeg" alt="Foto 7" />
+          <img src="fotos/8.jpeg" alt="Foto 8" />
+          <img src="fotos/9.jpeg" alt="Foto 9" />
+          <img src="fotos/10.jpeg" alt="Foto 10" />
+          <img src="fotos/11.jpeg" alt="Foto 11" />
+          <img src="fotos/12.jpeg" alt="Foto 12" />
+          <img src="fotos/13.jpeg" alt="Foto 13" />
+          <img src="fotos/14.jpeg" alt="Foto 14" />
+          <img src="fotos/15.jpeg" alt="Foto 15" />
+          <img src="fotos/16.jpeg" alt="Foto 16" />
+          <img src="fotos/17.jpeg" alt="Foto 17" />
+          <img src="fotos/18.jpeg" alt="Foto 18" />
+          <img src="fotos/19.jpeg" alt="Foto 19" />
+          <div class="caption" id="caption">“Tu + eu = a minha cena favorita.”</div>
+        </div>
+
+        <div class="actions">
+          <button class="secondary" id="replay">Ver outra vez ✨</button>
+          <button id="start">Começar o puzzle 🔒</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <audio id="bgMusic" loop>
+    <source src="musica/thoseEyes.mp3" type="audio/mpeg">
+  </audio>
+
+
+  <script>
+
+    // ========= CONFIG =========
+    // 1) Troca as legendas se quiseres
+    const captions = [
+      "“Tu + eu = a minha cena favorita.”",
+      "“Obrigada por existires na minha vida.”",
+      "“A nossa história é o meu lugar seguro.”",
+      "“E isto é só o início…”"
+    ];
+
+    // 2) Mensagens na carta (vai alternando)
+    const messages = [
+      "Hoje só quero lembrar-te o quanto AMO a nossa história. Obrigado por seres a minha pessoa favorita. 🥹",
+      "Se eu pudesse escolher 1 milhão de vezes… escolhia-te sempre. ❤️",
+      "Prometo continuar a fazer-te sorrir — mesmo nas pequenas coisas. ✨"
+    ];
+
+    // ========= SLIDESHOW =========
+    const imgs = [...document.querySelectorAll(".photoFrame img")];
+    const captionEl = document.getElementById("caption");
+    const msgEl = document.getElementById("message");
+
+    let idx = 0;
+    let msgIdx = 0;
+
+    function show(i) {
+      imgs.forEach((im, k) => im.classList.toggle("active", k === i));
+      captionEl.textContent = captions[i % captions.length];
+    }
+
+    function next() {
+      idx = (idx + 1) % imgs.length;
+      show(idx);
+
+      // alterna mensagem na carta também (fofinho)
+      msgIdx = (msgIdx + 1) % messages.length;
+      msgEl.textContent = messages[msgIdx];
+    }
+
+    imgs.forEach((img) => {
+      img.addEventListener("load", () => console.log("OK:", img.getAttribute("src")));
+      img.addEventListener("error", () => console.log("ERRO:", img.getAttribute("src")));
+    });
+
+
+    let interval = setInterval(next, 4800);
+
+    // ========= CONFETTI DE CORAÇÕES =========
+    const confetti = document.getElementById("confetti");
+    const hearts = ["💖", "💗", "💘", "💕", "💓", "❤️", "✨"];
+
+    function spawnHeart() {
+      const s = document.createElement("div");
+      s.className = "h";
+      s.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+      const left = Math.random() * 100;
+      const dur = 3 + Math.random() * 2.8;
+      const size = 14 + Math.random() * 18;
+      s.style.left = left + "vw";
+      s.style.animationDuration = dur + "s";
+      s.style.fontSize = size + "px";
+      s.style.top = (-30 - Math.random() * 50) + "px";
+      s.style.opacity = "0";
+      confetti.appendChild(s);
+
+      // start animation next tick
+      requestAnimationFrame(() => { s.style.opacity = "1"; });
+
+      setTimeout(() => s.remove(), (dur * 1000) + 200);
+    }
+
+    let confettiTimer = setInterval(spawnHeart, 180);
+
+    // ========= BOTÕES =========
+    document.getElementById("start").addEventListener("click", () => {
+      // Vai para o puzzle
+      goTo("index.html");
+    });
+
+    document.getElementById("replay").addEventListener("click", () => {
+      // Recomeça tudo
+      clearInterval(interval);
+      idx = 0; msgIdx = 0;
+      show(idx);
+      msgEl.textContent = messages[msgIdx];
+      interval = setInterval(next, 3200);
+
+      // efeito: “chuva” extra por 1s
+      const burstEnd = Date.now() + 900;
+      const burst = setInterval(() => {
+        spawnHeart(); spawnHeart(); spawnHeart();
+        if (Date.now() > burstEnd) clearInterval(burst);
+      }, 80);
+    });
+
+    imgs.forEach((img) => {
+      img.addEventListener("error", () => {
+        console.error("Erro a carregar:", img.src);
+      });
+    });
+
+
+    // init
+    show(0);
+  </script>
+  <script src="assets/player.js"></script>
+</body>
+
+</html>

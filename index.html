@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="pt">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Puzzle do Amor</title>
+  <style>
+    :root {
+      --bg1: #0b1020;
+      --bg2: #1a1033;
+      --card: rgba(255, 255, 255, .08);
+      --border: rgba(255, 255, 255, .14);
+      --text: #f6f3ff;
+      --muted: rgba(246, 243, 255, .75);
+      --good: #32d583;
+      --bad: #ff5a7a;
+      --accent: #ff66c4;
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 700px at 20% 15%, rgba(255, 102, 196, .22), transparent 55%),
+        radial-gradient(900px 600px at 80% 20%, rgba(124, 92, 255, .22), transparent 55%),
+        linear-gradient(135deg, var(--bg1), var(--bg2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .wrap {
+      width: min(920px, 100%)
+    }
+
+    .header {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 28px
+    }
+
+    p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      line-height: 1.5
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: 0 18px 60px rgba(0, 0, 0, .35);
+      backdrop-filter: blur(10px);
+    }
+
+    .grid {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    @media (max-width: 760px) {
+      .grid {
+        grid-template-columns: 1fr
+      }
+    }
+
+    .q {
+      padding: 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, .12);
+      background: rgba(0, 0, 0, .12);
+    }
+
+    .q h3 {
+      margin: 0 0 10px;
+      font-size: 16px
+    }
+
+    .row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap
+    }
+
+    input[type="text"],
+    input[type="number"] {
+      width: 100%;
+      padding: 12px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, .18);
+      background: rgba(12, 12, 20, .55);
+      color: var(--text);
+      outline: none;
+    }
+
+    input::placeholder {
+      color: rgba(246, 243, 255, .45)
+    }
+
+    .mini {
+      margin-top: 10px;
+      font-size: 13px;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, .16);
+      background: rgba(0, 0, 0, .12);
+      font-size: 13px;
+    }
+
+    .pill b {
+      letter-spacing: .08em
+    }
+
+    .pill .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%
+    }
+
+    .dot.good {
+      background: var(--good)
+    }
+
+    .dot.bad {
+      background: var(--bad)
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: flex-end;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      padding: 12px 14px;
+      border-radius: 12px;
+      font-weight: 700;
+      color: #120a1f;
+      background: linear-gradient(135deg, #ff66c4, #7c5cff);
+      box-shadow: 0 10px 30px rgba(255, 102, 196, .18);
+    }
+
+    button.secondary {
+      color: var(--text);
+      background: rgba(255, 255, 255, .10);
+      border: 1px solid rgba(255, 255, 255, .16);
+      box-shadow: none;
+    }
+
+    .lock {
+      margin-top: 16px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+      padding: 14px;
+      border-radius: 14px;
+      border: 1px dashed rgba(255, 255, 255, .22);
+      background: rgba(0, 0, 0, .10);
+    }
+
+    .lock input {
+      max-width: 220px;
+      letter-spacing: .35em;
+      text-align: center;
+      font-weight: 800;
+      font-size: 18px;
+    }
+
+    .msg {
+      margin: 10px 0 0;
+      color: var(--muted)
+    }
+
+    .msg strong {
+      color: var(--text)
+    }
+
+    .shake {
+      animation: shake .35s linear
+    }
+
+    @keyframes shake {
+
+      0%,
+      100% {
+        transform: translateX(0)
+      }
+
+      20% {
+        transform: translateX(-6px)
+      }
+
+      40% {
+        transform: translateX(6px)
+      }
+
+      60% {
+        transform: translateX(-4px)
+      }
+
+      80% {
+        transform: translateX(4px)
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="header">
+      <div>
+        <h1>O Puzzle do Amor - Vamos ver se te safas</h1>
+        <p>Responde às 4 perguntas. Cada resposta dá-te <strong>1 dígito</strong>. Junta os 4 dígitos e abre o cadeado
+          ❤️</p>
+      </div>
+      <div class="pill" id="statusPill" aria-live="polite">
+        <span class="dot bad" id="statusDot"></span>
+        Progresso: <b id="progress">0/4</b>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="grid">
+        <!-- Pergunta 1 -->
+        <div class="q" data-q="1">
+          <h3>1) Qual é o <strong>dia</strong> da nossa data especial?</h3>
+          <input id="a1" type="text" inputmode="numeric" maxlength="2" />
+          <div class="mini">
+            <span>Dica: é no formato dd</span>
+            <span id="r1">—</span>
+          </div>
+        </div>
+
+        <!-- Pergunta 2 -->
+        <div class="q" data-q="2">
+          <h3>2) Qual é o nosso <strong>número</strong> da sorte?</h3>
+          <input id="a2" type="text" inputmode="numeric" maxlength="1" />
+          <div class="mini">
+            <span id="r2">—</span>
+          </div>
+        </div>
+
+        <!-- Pergunta 3 -->
+        <div class="q" data-q="3">
+          <h3>3) Quem <strong>ama</strong> mais?</h3>
+          <input id="a3" type="text" inputmode="numeric" maxlength="1" />
+          <div class="mini">
+            <span>Dica: 0-10 (sendo 0 ambos)</span>
+            <span id="r3">—</span>
+          </div>
+        </div>
+
+        <!-- Pergunta 4 -->
+        <div class="q" data-q="4">
+          <h3>4) Qual é o <strong>mês</strong> mais bonito do ano?</h3>
+          <input id="a4" type="text" inputmode="numeric" maxlength="1" />
+          <div class="mini">
+            <span>Dica: não há dica</span>
+            <span id="r4">—</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="secondary" id="autoFill">Preencher o cadeado (com os dígitos certos)</button>
+        <button id="checkAll">Validar respostas</button>
+      </div>
+
+      <div class="lock">
+        <div style="flex:1; min-width:240px;">
+          <div style="font-weight:800; margin-bottom:8px;">Cadeado (4 dígitos)</div>
+          <input id="lock" type="text" inputmode="numeric" maxlength="4" placeholder="____" />
+          <div class="msg" id="lockMsg">Quando tiveres os 4 dígitos, escreve aqui e carrega em <strong>Abrir</strong>.
+          </div>
+        </div>
+
+        <button id="openLock">Abrir 🔓</button>
+      </div>
+    </div>
+  </div>
+
+  <audio id="bgMusic" loop>
+    <source src="musica/thoseEyes.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    // ✅ Define aqui a “verdade” do puzzle (baseado em 22/07/2022)
+    const answers = {
+      a1: "22", // dia
+      a2: "8", // mês (com zero à esquerda)
+      a3: "0",  // primeiro dígito do ano (2022)
+      a4: "7"   // último dígito do ano
+    };
+
+    // O código final do cadeado: (22 -> "2"), (07 -> "7"), (2), (2) => "2722"
+    // Se quiseres outro, muda a forma como construímos abaixo.
+    function buildCode() {
+      const d = answers.a1;        // "22"
+      const m = answers.a2;        // "8"
+      const y1 = answers.a3;       // "0"
+      const y4 = answers.a4;       // "7"
+
+      // Código final: dia[0] + mês[1] + y1 + y4 = 2 + 7 + 2 + 2 => "2722"
+      return `${d[0]}${m[0]}${y1}${y4}`;
+    }
+
+    const code = buildCode();
+
+    const ids = ["a1", "a2", "a3", "a4"];
+    const res = ["r1", "r2", "r3", "r4"];
+
+    function sanitizeDigits(str) {
+      return (str || "").replace(/\D/g, "");
+    }
+
+    function checkOne(i) {
+      const id = ids[i];
+      const el = document.getElementById(id);
+      const out = document.getElementById(res[i]);
+
+      el.value = sanitizeDigits(el.value).slice(0, el.maxLength || 99);
+
+      const ok = el.value === answers[id];
+      out.textContent = ok ? "✅ certo" : "❌";
+      out.style.color = ok ? "var(--good)" : "var(--bad)";
+      return ok;
+    }
+
+    function updateProgress() {
+      const okCount = ids.reduce((acc, id, i) => acc + (checkOne(i) ? 1 : 0), 0);
+      document.getElementById("progress").textContent = `${okCount}/4`;
+
+      const dot = document.getElementById("statusDot");
+      dot.classList.toggle("good", okCount === 4);
+      dot.classList.toggle("bad", okCount !== 4);
+    }
+
+    // Live validation
+    ids.forEach((id, i) => {
+      document.getElementById(id).addEventListener("input", () => {
+        checkOne(i);
+        updateProgress();
+      });
+    });
+
+    document.getElementById("checkAll").addEventListener("click", () => {
+      updateProgress();
+      if (ids.every((id, i) => checkOne(i))) {
+        document.getElementById("lockMsg").innerHTML =
+          `Perfeito ❤️ Agora o teu código final é a combinação dos dígitos certos. (Podes escrever já: <strong>${code}</strong>)`;
+      } else {
+        document.getElementById("lockMsg").textContent =
+          "Ainda falta pelo menos uma resposta. Tenta outra vez 🙂";
+      }
+    });
+
+    document.getElementById("autoFill").addEventListener("click", () => {
+      // Só preenche o cadeado quando as respostas estiverem certas
+      const okAll = ids.every((id, i) => checkOne(i));
+      updateProgress();
+
+      if (!okAll) {
+        wiggleLock("Primeiro acerta as 4 perguntas 🙂");
+        return;
+      }
+      document.getElementById("lock").value = code;
+      document.getElementById("lockMsg").textContent = "Agora sim… abre o cadeado 😏";
+    });
+
+    function wiggleLock(message) {
+      const lockBox = document.querySelector(".lock");
+      lockBox.classList.remove("shake");
+      void lockBox.offsetWidth; // restart animation
+      lockBox.classList.add("shake");
+      document.getElementById("lockMsg").textContent = message;
+    }
+
+    document.getElementById("openLock").addEventListener("click", () => {
+      const lock = document.getElementById("lock");
+      lock.value = sanitizeDigits(lock.value).slice(0, 4);
+
+      const okAll = ids.every((id, i) => checkOne(i));
+      updateProgress();
+
+      if (!okAll) {
+        wiggleLock("Ups… tens de acertar as 4 perguntas primeiro 🙂");
+        return;
+      }
+
+      if (lock.value === code) {
+        // ✅ Redireciona para a página da Tree of Love
+        goTo("tree.html");
+      } else {
+        wiggleLock("Código errado 😅 Tenta outra vez!");
+      }
+    });
+
+    // init
+    updateProgress();
+  </script>
+  <script src="assets/player.js"></script>
+</body>
+
+</html>
